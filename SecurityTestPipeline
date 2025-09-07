@@ -10,30 +10,30 @@ pipeline {
         }
         stage('Install Dependencies') {
             environment {
-                // Set the Node.js and NPM paths
-                NODE_HOME = '/opt/homebrew/bin'
+                // Adding Node.js to the PATH variable
+                PATH = "/opt/homebrew/bin:${env.PATH}"
             }
             steps {
-                // Use Node.js and NPM from the specified paths
-                sh '${NODE_HOME}/npm install'
+                // Use NPM from the specified paths
+                sh 'npm install'
             }
         }
         stage('Run Tests') {
             steps {
                 // Run tests and allow pipeline to continue on failure
-                sh '${NODE_HOME}/npm test || true'
+                sh 'npm test || true'
             }
         }
         stage('Generate Coverage Report') {
             steps {
                 // Generate coverage report and allow pipeline to continue on failure
-                sh '${NODE_HOME}/npm run coverage || true'
+                sh 'npm run coverage || true'
             }
         }
         stage('NPM Audit (Security Scan)') {
             steps {
                 // Run security audit and allow pipeline to continue on failure
-                sh '${NODE_HOME}/npm audit || true'
+                sh 'npm audit || true'
             }
         }
     }
@@ -41,7 +41,6 @@ pipeline {
     // Optional: Post actions (such as notifications) can go here
     post {
         always {
-            // Clean up or notifications can be added here
             echo 'Pipeline finished. Cleaning up...'
         }
     }
