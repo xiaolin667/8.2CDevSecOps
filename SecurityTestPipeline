@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from the main branch
+                git branch: 'main', url: 'https://github.com/xiaolin667/8.2CDevSecOps.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                // Install NPM packages
+                sh 'npm install'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                // Run tests and allow pipeline to continue on failure
+                sh 'npm test || true'
+            }
+        }
+        stage('Generate Coverage Report') {
+            steps {
+                // Generate coverage report and allow pipeline to continue on failure
+                sh 'npm run coverage || true'
+            }
+        }
+        stage('NPM Audit (Security Scan)') {
+            steps {
+                // Run security audit and allow pipeline to continue on failure
+                sh 'npm audit || true'
+            }
+        }
+    }
+
+    // Optional: Post actions (such as notifications) can go here
+    post {
+        always {
+            // Clean up or notifications can be added here
+            echo 'Pipeline finished. Cleaning up...'
+        }
+    }
+}
