@@ -9,27 +9,31 @@ pipeline {
             }
         }
         stage('Install Dependencies') {
+            environment {
+                // Set the Node.js and NPM paths
+                NODE_HOME = '/opt/homebrew/bin'
+            }
             steps {
-                // Install NPM packages using the full path to npm
-                sh '/opt/homebrew/bin/npm install'
+                // Use Node.js and NPM from the specified paths
+                sh '${NODE_HOME}/npm install'
             }
         }
         stage('Run Tests') {
             steps {
                 // Run tests and allow pipeline to continue on failure
-                sh '/opt/homebrew/bin/npm test || true'
+                sh '${NODE_HOME}/npm test || true'
             }
         }
         stage('Generate Coverage Report') {
             steps {
                 // Generate coverage report and allow pipeline to continue on failure
-                sh '/opt/homebrew/bin/npm run coverage || true'
+                sh '${NODE_HOME}/npm run coverage || true'
             }
         }
         stage('NPM Audit (Security Scan)') {
             steps {
                 // Run security audit and allow pipeline to continue on failure
-                sh '/opt/homebrew/bin/npm audit || true'
+                sh '${NODE_HOME}/npm audit || true'
             }
         }
     }
