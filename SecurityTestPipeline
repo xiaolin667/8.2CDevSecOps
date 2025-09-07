@@ -10,26 +10,26 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                // Install NPM packages
-                sh 'npm install'
+                // Install NPM packages using the full path to npm
+                sh '/opt/homebrew/bin/npm install'
             }
         }
         stage('Run Tests') {
             steps {
                 // Run tests and allow pipeline to continue on failure
-                sh 'npm test || true'
+                sh '/opt/homebrew/bin/npm test || true'
             }
         }
         stage('Generate Coverage Report') {
             steps {
                 // Generate coverage report and allow pipeline to continue on failure
-                sh 'npm run coverage || true'
+                sh '/opt/homebrew/bin/npm run coverage || true'
             }
         }
         stage('NPM Audit (Security Scan)') {
             steps {
                 // Run security audit and allow pipeline to continue on failure
-                sh 'npm audit || true'
+                sh '/opt/homebrew/bin/npm audit || true'
             }
         }
     }
